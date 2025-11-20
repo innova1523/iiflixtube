@@ -1,5 +1,4 @@
-const TMDB_KEY = 'YOUR_TMDB_API_KEY'; // Replace with your TMDB key
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+const TMDB_KEY = '603b75fddf9facc67e581c1fa74d3d8f';
 const BG_URL = 'https://image.tmdb.org/t/p/original';
 
 document.addEventListener("DOMContentLoaded", () => {
