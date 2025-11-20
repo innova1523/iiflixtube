@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyFlix - Netflix Style</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+<header>
+  <div class="logo">MyFlix</div>
+  <nav>
+    <a href="#">Home</a>
+    <a href="#">TV Shows</a>
+    <a href="#">Movies</a>
+  </nav>
+  <div class="search-container">
+    <input type="text" id="searchInput" placeholder="Search">
+    <i class="fas fa-search"></i>
+  </div>
+</header>
+
+<section class="hero" id="hero">
+  <div class="hero-content">
+    <h1 id="heroTitle">Featured Movie</h1>
+    <p id="heroDesc">Movie description goes here.</p>
+    <button class="btn btn-play" id="playHero">► Play</button>
+    <button class="btn btn-info" id="infoHero">More Info</button>
+  </div>
+</section>
+
+<div id="rows"></div>
+
+<!-- Modal -->
+<div class="modal" id="modal">
+  <div class="modal-content">
+    <span class="close" id="closeModal">&times;</span>
+    <h2 id="modalTitle"></h2>
+    <p id="modalDesc"></p>
+    <div id="modalTrailer"></div>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 MyFlix. Data from TMDB.
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
