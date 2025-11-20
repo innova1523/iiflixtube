@@ -1,4 +1,5 @@
 const TMDB_KEY = '603b75fddf9facc67e581c1fa74d3d8f';
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 const BG_URL = 'https://image.tmdb.org/t/p/original';
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,26 +45,29 @@ document.addEventListener("DOMContentLoaded", () => {
       const h2 = document.createElement('h2');
       h2.textContent = cat.title;
       rowDiv.appendChild(h2);
+
       const movieRow = document.createElement('div');
       movieRow.classList.add('movie-row');
+
       data.results.forEach(m=>{
         const movieDiv = document.createElement('div');
         movieDiv.classList.add('movie');
         movieDiv.style.backgroundImage = `url(${IMG_URL + m.poster_path})`;
         movieDiv.title = m.title;
-        movieDiv.onmouseover = ()=>{ movieDiv.innerHTML='<div class="play-hover">►</div>'; };
-        movieDiv.onmouseleave = ()=>{ movieDiv.innerHTML=''; };
         movieDiv.onclick = ()=>openModal(m.id);
         movieRow.appendChild(movieDiv);
       });
+
       const leftArrow = document.createElement('button');
       leftArrow.classList.add('arrow','arrow-left');
       leftArrow.innerHTML = '&#10094;';
       leftArrow.onclick = () => { movieRow.scrollBy({left:-300,behavior:'smooth'}); };
+
       const rightArrow = document.createElement('button');
       rightArrow.classList.add('arrow','arrow-right');
       rightArrow.innerHTML = '&#10095;';
       rightArrow.onclick = () => { movieRow.scrollBy({left:300,behavior:'smooth'}); };
+
       rowDiv.appendChild(leftArrow);
       rowDiv.appendChild(rightArrow);
       rowDiv.appendChild(movieRow);
