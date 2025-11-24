@@ -8,7 +8,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const heroTitle = document.getElementById('heroTitle');
   const heroDesc = document.getElementById('heroDesc');
   const searchInput = document.getElementById('searchInput');
-
   const modal = document.getElementById('modal');
   const closeModalBtn = document.getElementById('closeModal');
   const modalTitle = document.getElementById('modalTitle');
@@ -31,15 +30,15 @@ document.addEventListener("DOMContentLoaded", () => {
   async function loadHero(){
     const data = await fetchTMDB('movie/popular?language=en-US&page=1');
     const movie = data.results[Math.floor(Math.random()*data.results.length)];
-    hero.style.backgroundImage = `url('${BG_URL+movie.backdrop_path}')`;
-    heroTitle.textContent = movie.title;
-    heroDesc.textContent = movie.overview.substring(0,180)+'...';
+    if(movie.backdrop_path) hero.style.backgroundImage = `url(${BG_URL+movie.backdrop_path})`;
+    heroTitle.textContent = movie.title || 'Untitled';
+    heroDesc.textContent = movie.overview ? movie.overview.substring(0,180)+'...' : '';
   }
 
   async function loadRows(){
     rowsContainer.innerHTML = '';
     for(let cat of categories){
-      const data = await fetchTMDB(cat.endpoint + '&language=en-US&page=1');
+      const data = await fetchTMDB(`${cat.endpoint}&language=en-US&page=1`);
       const rowDiv = document.createElement('div');
       rowDiv.classList.add('row');
       const h2 = document.createElement('h2');
@@ -50,23 +49,24 @@ document.addEventListener("DOMContentLoaded", () => {
       movieRow.classList.add('movie-row');
 
       data.results.forEach(m=>{
+        if(!m.poster_path) return;
         const movieDiv = document.createElement('div');
         movieDiv.classList.add('movie');
         movieDiv.style.backgroundImage = `url(${IMG_URL + m.poster_path})`;
         movieDiv.title = m.title;
-        movieDiv.onclick = ()=>openModal(m.id);
+        movieDiv.addEventListener('click', ()=>openModal(m.id));
         movieRow.appendChild(movieDiv);
       });
 
+      // arrows
       const leftArrow = document.createElement('button');
-      leftArrow.classList.add('arrow','arrow-left');
+      leftArrow.className = 'arrow arrow-left';
       leftArrow.innerHTML = '&#10094;';
-      leftArrow.onclick = () => { movieRow.scrollBy({left:-300,behavior:'smooth'}); };
-
+      leftArrow.onclick = () => movieRow.scrollBy({left:-300,behavior:'smooth'});
       const rightArrow = document.createElement('button');
-      rightArrow.classList.add('arrow','arrow-right');
+      rightArrow.className = 'arrow arrow-right';
       rightArrow.innerHTML = '&#10095;';
-      rightArrow.onclick = () => { movieRow.scrollBy({left:300,behavior:'smooth'}); };
+      rightArrow.onclick = () => movieRow.scrollBy({left:300,behavior:'smooth'});
 
       rowDiv.appendChild(leftArrow);
       rowDiv.appendChild(rightArrow);
@@ -77,16 +77,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function openModal(movieId){
     const movie = await fetchTMDB(`movie/${movieId}?language=en-US`);
-    modalTitle.textContent = movie.title;
-    modalDesc.textContent = movie.overview;
+    modalTitle.textContent = movie.title || 'Untitled';
+    modalDesc.textContent = movie.overview || 'No description.';
     const videos = await fetchTMDB(`movie/${movieId}/videos`);
-    const yt = videos.results.find(v => v.site==='YouTube');
+    const yt = videos.results.find(v => v.site==='YouTube' && v.type==='Trailer');
     modalTrailer.innerHTML = yt ? `<iframe width="100%" height="315" src="https://www.youtube.com/embed/${yt.key}" frameborder="0" allowfullscreen></iframe>` : "<p>No trailer available</p>";
     modal.style.display='block';
   }
 
   closeModalBtn.onclick = () => { modal.style.display='none'; modalTrailer.innerHTML=''; };
-  window.onclick = e => { if(e.target==modal) modal.style.display='none'; modalTrailer.innerHTML=''; };
+  window.onclick = e => { if(e.target==modal){ modal.style.display='none'; modalTrailer.innerHTML=''; } };
 
   searchInput.addEventListener('keypress', async e=>{
     if(e.key==='Enter'){
@@ -102,11 +102,12 @@ document.addEventListener("DOMContentLoaded", () => {
       const movieRow = document.createElement('div');
       movieRow.classList.add('movie-row');
       data.results.forEach(m=>{
+        if(!m.poster_path) return;
         const movieDiv = document.createElement('div');
         movieDiv.classList.add('movie');
         movieDiv.style.backgroundImage = `url(${IMG_URL + m.poster_path})`;
         movieDiv.title = m.title;
-        movieDiv.onclick = ()=>openModal(m.id);
+        movieDiv.addEventListener('click', ()=>openModal(m.id));
         movieRow.appendChild(movieDiv);
       });
       rowDiv.appendChild(movieRow);
