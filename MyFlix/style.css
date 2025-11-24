@@ -91,7 +91,7 @@ nav a:hover {opacity:1;}
 }
 .movie:hover {transform:scale(1.05);}
 .movie::after {
-  content:'\f04b'; /* FontAwesome play icon */
+  content:'\f04b';
   font-family: "Font Awesome 5 Free";
   font-weight:900;
   position:absolute;
